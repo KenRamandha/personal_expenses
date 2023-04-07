@@ -11,24 +11,26 @@ class TrnasList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return transaction.isEmpty
-        ? Column(
-            children: [
-              Text(
-                'No transaction added yet',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                height: 50,
-                child: Image.asset(
-                  'assets/images/ic_dada.png',
-                  fit: BoxFit.cover,
+        ? LayoutBuilder(builder: (ctx, constraint) {
+            return Column(
+              children: [
+                Text(
+                  'No transaction added yet',
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
-              )
-            ],
-          )
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  height: constraint.maxHeight * 0.6,
+                  child: Image.asset(
+                    'assets/images/ic_dada.png',
+                    fit: BoxFit.cover,
+                  ),
+                )
+              ],
+            );
+          })
         : ListView.builder(
             itemBuilder: (context, index) {
               return Card(
@@ -51,11 +53,20 @@ class TrnasList extends StatelessWidget {
                   subtitle: Text(
                     DateFormat.yMMMMd().format(transaction[index].date),
                   ),
-                  trailing: IconButton(
-                    icon: Icon(Icons.delete),
-                    color: Theme.of(context).errorColor,
-                    onPressed: () => deleteTx(transaction[index].id),
-                  ),
+                  trailing: MediaQuery.of(context).size.width > 460
+                      ? TextButton.icon(
+                          icon: Icon(Icons.delete),
+                          label: Text('Delete'),
+                          style: TextButton.styleFrom(
+                              foregroundColor:
+                                  Theme.of(context).colorScheme.error),
+                          onPressed: () => deleteTx(transaction[index].id),
+                        )
+                      : IconButton(
+                          icon: Icon(Icons.delete),
+                          color: Theme.of(context).colorScheme.error,
+                          onPressed: () => deleteTx(transaction[index].id),
+                        ),
                 ),
               );
             },

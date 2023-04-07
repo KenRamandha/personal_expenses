@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:personal_expenses/widgets/chart.dart';
 
 import './widgets/new_trans.dart';
@@ -9,6 +10,11 @@ import './widgets/chart.dart';
 // import 'package:personal_expenses/model/transaction.dart';
 
 void main() {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setPreferredOrientations(
+  //   DeviceOrientation.portraitUp,
+  //   DeviceOrientation.portraitDown ,
+  // );
   runApp(MyApp());
 }
 
@@ -63,6 +69,8 @@ class _expensesAppState extends State<expensesApp> {
     // ),
   ];
 
+  bool _showChart = false;
+
   List<Transaction> get _recentTransaction {
     return _userTrans.where((tx) {
       return tx.date.isAfter(
@@ -109,6 +117,8 @@ class _expensesAppState extends State<expensesApp> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final isLandscape = mediaQuery.orientation == Orientation.landscape;
     final appBar = AppBar(
       title: Text('Expenses Apps'),
       actions: [
@@ -119,6 +129,13 @@ class _expensesAppState extends State<expensesApp> {
       ],
       centerTitle: true,
     );
+    final txListWidgate = Container(
+        height: (mediaQuery.size.height -
+                appBar.preferredSize.height -
+                mediaQuery.padding.top) *
+            0.7,
+        child: TrnasList(_userTrans, _deleteTransaction));
+
     return Scaffold(
       appBar: appBar,
       body: SingleChildScrollView(
@@ -126,18 +143,38 @@ class _expensesAppState extends State<expensesApp> {
           // mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
+            if (isLandscape)
+              Row(
+                children: [
+                  Text('Show Chart'),
+                  Switch(
+                    value: _showChart,
+                    onChanged: (val) {
+                      setState(() {
+                        _showChart = val;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            if (!isLandscape)
+              Container(
                 height: (MediaQuery.of(context).size.height -
                         appBar.preferredSize.height -
                         MediaQuery.of(context).padding.top) *
-                    0.4,
-                child: Chart(_recentTransaction)),
-            Container(
-                height: (MediaQuery.of(context).size.height -
-                        appBar.preferredSize.height -
-                        MediaQuery.of(context).padding.top) *
-                    0.6,
-                child: TrnasList(_userTrans, _deleteTransaction)),
+                    0.3,
+                child: Chart(_recentTransaction),
+              ),
+            if (!isLandscape) txListWidgate,
+            if (isLandscape)
+              _showChart
+                  ? Container(
+                      height: (mediaQuery.size.height -
+                              appBar.preferredSize.height -
+                              mediaQuery.padding.top) *
+                          0.6,
+                      child: Chart(_recentTransaction))
+                  : txListWidgate
           ],
         ),
       ),
