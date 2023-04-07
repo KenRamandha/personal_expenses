@@ -22,7 +22,7 @@ class TrnasList extends StatelessWidget {
                   height: 10,
                 ),
                 Container(
-                  height: constraint.maxHeight * 0.6,
+                  height: constraint.maxHeight * 0.3,
                   child: Image.asset(
                     'assets/images/ic_dada.png',
                     fit: BoxFit.cover,
