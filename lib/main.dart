@@ -56,7 +56,7 @@ class expensesApp extends StatefulWidget {
   _expensesAppState createState() => _expensesAppState();
 }
 
-class _expensesAppState extends State<expensesApp> {
+class _expensesAppState extends State<expensesApp> with WidgetsBindingObserver {
   // late String titleInput;
   final List<Transaction> _userTrans = [
     // Transaction(
@@ -74,6 +74,23 @@ class _expensesAppState extends State<expensesApp> {
   ];
 
   bool _showChart = false;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  didChangeAppLifecycState(AppLifecycleState state) {
+    print(state);
+  }
+
+  @override
+  dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
 
   List<Transaction> get _recentTransaction {
     return _userTrans.where((tx) {
@@ -119,19 +136,59 @@ class _expensesAppState extends State<expensesApp> {
     });
   }
 
-  // Widget _buildLandscapeContent(){
+  List<Widget> _buildLandscapeContent(
+    MediaQueryData mediaQuery,
+    AppBar appBar,
+    Widget txListWidgate,
+  ) {
+    return [
+      Row(
+        children: [
+          Text(
+            'Show Chart',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          Switch.adaptive(
+            activeColor: Theme.of(context).colorScheme.primary,
+            value: _showChart,
+            onChanged: (val) {
+              setState(() {
+                _showChart = val;
+              });
+            },
+          ),
+        ],
+      ),
+      _showChart
+          ? Container(
+              height: (mediaQuery.size.height -
+                      appBar.preferredSize.height -
+                      mediaQuery.padding.top) *
+                  0.6,
+              child: Chart(_recentTransaction))
+          : txListWidgate
+    ];
+  }
 
-  // }
+  List<Widget> _buildPotraitContent(
+    MediaQueryData mediaQuery,
+    AppBar appBar,
+    Widget txListWidgate,
+  ) {
+    return [
+      Container(
+        height: (mediaQuery.size.height -
+                appBar.preferredSize.height -
+                mediaQuery.padding.top) *
+            0.3,
+        child: Chart(_recentTransaction),
+      ),
+      txListWidgate
+    ];
+  }
 
-  // Widget _buildPotraitContent(){
-    
-  // }
-
-  @override
-  Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
-    final isLandscape = mediaQuery.orientation == Orientation.landscape;
-    final dynamic appBar = Platform.isIOS
+  Widget _buildAppBar() {
+    return Platform.isIOS
         ? CupertinoNavigationBar(
             middle: Text(
               'Expenses Apps',
@@ -156,6 +213,13 @@ class _expensesAppState extends State<expensesApp> {
             ],
             centerTitle: true,
           );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final isLandscape = mediaQuery.orientation == Orientation.landscape;
+    final dynamic appBar = _buildAppBar();
     final txListWidgate = Container(
         height: (mediaQuery.size.height -
                 appBar.preferredSize.height -
@@ -168,41 +232,17 @@ class _expensesAppState extends State<expensesApp> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           if (isLandscape)
-            Row(
-              children: [
-                Text(
-                  'Show Chart',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                Switch.adaptive(
-                  activeColor: Theme.of(context).colorScheme.primary,
-                  value: _showChart,
-                  onChanged: (val) {
-                    setState(() {
-                      _showChart = val;
-                    });
-                  },
-                ),
-              ],
+            ..._buildLandscapeContent(
+              mediaQuery,
+              appBar,
+              txListWidgate,
             ),
           if (!isLandscape)
-            Container(
-              height: (mediaQuery.size.height -
-                      appBar.preferredSize.height -
-                      mediaQuery.padding.top) *
-                  0.3,
-              child: Chart(_recentTransaction),
+            ..._buildPotraitContent(
+              mediaQuery,
+              appBar,
+              txListWidgate,
             ),
-          if (!isLandscape) txListWidgate,
-          if (isLandscape)
-            _showChart
-                ? Container(
-                    height: (mediaQuery.size.height -
-                            appBar.preferredSize.height -
-                            mediaQuery.padding.top) *
-                        0.6,
-                    child: Chart(_recentTransaction))
-                : txListWidgate
         ],
       ),
     );

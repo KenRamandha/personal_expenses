@@ -10,16 +10,43 @@ import '../widgets/adaptive_flat_button.dart';
 class NewTrans extends StatefulWidget {
   final Function addTx;
 
-  NewTrans(this.addTx);
+  NewTrans(this.addTx) {
+    print('Construct newTrans Widgate');
+  }
 
   @override
-  State<NewTrans> createState() => _NewTransState();
+  _NewTransState createState() {
+    print('Createstate newTrans Widgate');
+    return _NewTransState();
+  }
 }
 
 class _NewTransState extends State<NewTrans> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   DateTime? _selectedDate = null;
+
+  _NewTransState() {
+    print('Constract newTrans State');
+  }
+
+  @override
+  void initState() {
+    print('InitState()');
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant NewTrans oldWidget) {
+    print('didUpdateWidget');
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    print('dispose');
+    super.dispose();
+  }
 
   void _submitData() {
     if (_amountController.text.isEmpty) {
