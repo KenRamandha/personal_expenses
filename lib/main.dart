@@ -119,6 +119,14 @@ class _expensesAppState extends State<expensesApp> {
     });
   }
 
+  // Widget _buildLandscapeContent(){
+
+  // }
+
+  // Widget _buildPotraitContent(){
+    
+  // }
+
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);

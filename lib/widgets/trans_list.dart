@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../model/transaction.dart';
-import 'package:intl/intl.dart';
+// import 'package:intl/intl.dart';
+import 'transaction_item.dart';
 
 class TrnasList extends StatelessWidget {
   final List<Transaction> transaction;
@@ -33,41 +34,9 @@ class TrnasList extends StatelessWidget {
           })
         : ListView.builder(
             itemBuilder: (context, index) {
-              return Card(
-                elevation: 5,
-                margin: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
-                child: ListTile(
-                  leading: CircleAvatar(
-                    radius: 30,
-                    child: Padding(
-                      padding: EdgeInsets.all(6),
-                      child: FittedBox(
-                        child: Text('\$${transaction[index].amount}'),
-                      ),
-                    ),
-                  ),
-                  title: Text(
-                    transaction[index].title,
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  subtitle: Text(
-                    DateFormat.yMMMMd().format(transaction[index].date),
-                  ),
-                  trailing: MediaQuery.of(context).size.width > 460
-                      ? TextButton.icon(
-                          icon: Icon(Icons.delete),
-                          label: Text('Delete'),
-                          style: TextButton.styleFrom(
-                              foregroundColor:
-                                  Theme.of(context).colorScheme.error),
-                          onPressed: () => deleteTx(transaction[index].id),
-                        )
-                      : IconButton(
-                          icon: Icon(Icons.delete),
-                          color: Theme.of(context).colorScheme.error,
-                          onPressed: () => deleteTx(transaction[index].id),
-                        ),
-                ),
+              return TransactionItem(
+                transaction: transaction[index],
+                deleteTx: deleteTx,
               );
             },
             itemCount: transaction.length,
