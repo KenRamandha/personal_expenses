@@ -7,7 +7,7 @@ class TrnasList extends StatelessWidget {
   final List<Transaction> transaction;
   final Function deleteTx;
 
-  TrnasList(this.transaction, this.deleteTx);
+  const TrnasList(this.transaction, this.deleteTx, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +19,10 @@ class TrnasList extends StatelessWidget {
                   'No transaction added yet',
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                Container(
+                SizedBox(
                   height: constraint.maxHeight * 0.3,
                   child: Image.asset(
                     'assets/images/ic_dada.png',

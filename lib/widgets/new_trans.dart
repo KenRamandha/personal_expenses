@@ -1,8 +1,8 @@
+// ignore_for_file: no_logic_in_create_state, library_private_types_in_public_api, avoid_print, duplicate_ignore, avoid_init_to_null
+
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import '../widgets/adaptive_flat_button.dart';
@@ -10,7 +10,8 @@ import '../widgets/adaptive_flat_button.dart';
 class NewTrans extends StatefulWidget {
   final Function addTx;
 
-  NewTrans(this.addTx) {
+  NewTrans(this.addTx, {super.key}) {
+    // ignore: avoid_print
     print('Construct newTrans Widgate');
   }
 
@@ -97,12 +98,12 @@ class _NewTransState extends State<NewTrans> {
             right: 10,
             bottom: MediaQuery.of(context).viewInsets.bottom + 10,
           ),
-          padding: EdgeInsets.all(5),
+          padding: const EdgeInsets.all(5),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               TextField(
-                decoration: InputDecoration(labelText: 'Title'),
+                decoration: const InputDecoration(labelText: 'Title'),
                 controller: _titleController,
                 onSubmitted: (_) => _submitData(),
                 // onChanged: (value) {
@@ -110,13 +111,13 @@ class _NewTransState extends State<NewTrans> {
                 // },
               ),
               TextField(
-                decoration: InputDecoration(labelText: 'Amount'),
+                decoration: const InputDecoration(labelText: 'Amount'),
                 controller: _amountController,
                 keyboardType: TextInputType.number,
                 onSubmitted: (_) => _submitData(),
                 // onChanged: (value) => amountInput = value,
               ),
-              Container(
+              SizedBox(
                 height: 70,
                 child: Row(
                   children: [
@@ -134,7 +135,7 @@ class _NewTransState extends State<NewTrans> {
               Platform.isIOS
                   ? CupertinoButton(
                       onPressed: _submitData,
-                      child: Text(
+                      child: const Text(
                         'Add Transaction',
                         style: TextStyle(
                           color: Colors.white,
@@ -143,7 +144,7 @@ class _NewTransState extends State<NewTrans> {
                     )
                   : ElevatedButton(
                       onPressed: _submitData,
-                      child: Text(
+                      child: const Text(
                         'Add Transaction',
                         style: TextStyle(
                           color: Colors.white,

@@ -1,15 +1,17 @@
+// ignore_for_file: camel_case_types, override_on_non_overriding_member, avoid_print, sort_child_properties_last
+
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:personal_expenses/widgets/chart.dart';
 
 import './widgets/new_trans.dart';
 import './widgets/trans_list.dart';
 import './model/transaction.dart';
-import './widgets/chart.dart';
+
 
 // import 'package:personal_expenses/model/transaction.dart';
 
@@ -19,40 +21,42 @@ void main() {
   //   DeviceOrientation.portraitUp,
   //   DeviceOrientation.portraitDown ,
   // );
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Expenses Apps',
       theme: ThemeData(
-        primarySwatch: Colors.blueGrey,
-        accentColor: Colors.tealAccent,
-        // errorColor: Colors.red,
         fontFamily: 'cabin',
         textTheme: ThemeData.light().textTheme.copyWith(
-              titleLarge: TextStyle(
+              titleLarge: const TextStyle(
                 fontFamily: 'cabin',
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
               ),
               // button: TextStyle(color: Colors.white),
             ),
-        appBarTheme: AppBarTheme(
+        appBarTheme: const AppBarTheme(
           titleTextStyle: TextStyle(
               fontFamily: 'cabin', fontSize: 20, fontWeight: FontWeight.bold),
-        ),
+        ), colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blueGrey).copyWith(secondary: Colors.tealAccent),
       ),
-      home: expensesApp(),
+      home: const expensesApp(),
     );
   }
 }
 
 class expensesApp extends StatefulWidget {
+  const expensesApp({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _expensesAppState createState() => _expensesAppState();
 }
 
@@ -83,7 +87,7 @@ class _expensesAppState extends State<expensesApp> with WidgetsBindingObserver {
 
   @override
   didChangeAppLifecycState(AppLifecycleState state) {
-    print(state);
+   print(state);
   }
 
   @override
@@ -96,7 +100,7 @@ class _expensesAppState extends State<expensesApp> with WidgetsBindingObserver {
     return _userTrans.where((tx) {
       return tx.date.isAfter(
         DateTime.now().subtract(
-          Duration(days: 7),
+          const Duration(days: 7),
         ),
       );
     }).toList();
@@ -160,7 +164,7 @@ class _expensesAppState extends State<expensesApp> with WidgetsBindingObserver {
         ],
       ),
       _showChart
-          ? Container(
+          ? SizedBox(
               height: (mediaQuery.size.height -
                       appBar.preferredSize.height -
                       mediaQuery.padding.top) *
@@ -176,7 +180,7 @@ class _expensesAppState extends State<expensesApp> with WidgetsBindingObserver {
     Widget txListWidgate,
   ) {
     return [
-      Container(
+      SizedBox(
         height: (mediaQuery.size.height -
                 appBar.preferredSize.height -
                 mediaQuery.padding.top) *
@@ -190,24 +194,24 @@ class _expensesAppState extends State<expensesApp> with WidgetsBindingObserver {
   Widget _buildAppBar() {
     return Platform.isIOS
         ? CupertinoNavigationBar(
-            middle: Text(
+            middle: const Text(
               'Expenses Apps',
             ),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 GestureDetector(
-                  child: Icon(CupertinoIcons.add),
+                  child: const Icon(CupertinoIcons.add),
                   onTap: () => _startNewTrans(context),
                 ),
               ],
             ),
           )
         : AppBar(
-            title: Text('Expenses Apps'),
+            title: const Text('Expenses Apps'),
             actions: [
               IconButton(
-                icon: Icon(Icons.add),
+                icon: const Icon(Icons.add),
                 onPressed: () => _startNewTrans(context),
               )
             ],
@@ -220,7 +224,7 @@ class _expensesAppState extends State<expensesApp> with WidgetsBindingObserver {
     final mediaQuery = MediaQuery.of(context);
     final isLandscape = mediaQuery.orientation == Orientation.landscape;
     final dynamic appBar = _buildAppBar();
-    final txListWidgate = Container(
+    final txListWidgate = SizedBox(
         height: (mediaQuery.size.height -
                 appBar.preferredSize.height -
                 mediaQuery.padding.top) *
@@ -259,7 +263,7 @@ class _expensesAppState extends State<expensesApp> with WidgetsBindingObserver {
             floatingActionButton: Platform.isIOS
                 ? Container()
                 : FloatingActionButton(
-                    child: Icon(Icons.add),
+                    child: const Icon(Icons.add),
                     onPressed: () => _startNewTrans(context),
                   ),
           );
